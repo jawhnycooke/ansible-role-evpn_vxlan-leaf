@@ -26,6 +26,7 @@ vlan {{ vlan_map.vlan_id }}
   vn-segment {{ vlan_map.vxlan_id }}
 !
 {% endfor %}
+{#
 {#route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
   The idea is to have a route-map per TENANT or VRF so we can redistribute the subnets in BGP.
   RECOMENDATION: Use the tag with the same number of the L3VNI
@@ -141,3 +142,4 @@ evpn
     {% endif %}
   {% endfor %}
 !
+#}
