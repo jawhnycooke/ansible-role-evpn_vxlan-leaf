@@ -1,5 +1,5 @@
 ---
 - name: Create the overlay configuration of an spine switch
-  - template:
+  template:
     src: base.j2
     dest: CFG/leaf.cfg
