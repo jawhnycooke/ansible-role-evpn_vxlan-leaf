@@ -69,7 +69,7 @@ vpc domain 105
 # ip_address is an optional key
 # route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
 {% for vlan_map in vlan_list_map %}
-interface {{ vlan_map.id }}
+interface {{ vlan_map.vlan_id }}
   description {{ vlan_map.name }}
   no shutdown
   vrf member {{ vlan_map.vrf }}
