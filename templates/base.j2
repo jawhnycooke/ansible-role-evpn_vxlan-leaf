@@ -33,7 +33,7 @@ route-map {{ route_map.name }} permit 10
 #vrf context Keep-Alive
 #  address-family ipv4 unicast
 !
-# vrf_map_list = [{name: TENANT-A, l3vin_id: 10020}]
+# vrf_map_list = [{name: TENANT-A, l3vni_id: 10020}]
 # l3vni_id is an int >= 4096
 {% for vrf_map in vrf_map_list %}
 vrf context {{ vrf_map.name }}
