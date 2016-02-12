@@ -73,7 +73,7 @@ interface {{ vlan_map.vlan_id }}
   description {{ vlan_map.name }}
   no shutdown
   vrf member {{ vlan_map.vrf }}
-  {% if vlan_map.ip_address %}
+  {% if vlan_map.ip_address is defined %}
     {% for route_map in route_map_list %}
       {% if route_map.name == vlan_map.vrf %}
         ip address {{ vlan_map.ip_address }} tag {{ route_map.tag }}
@@ -127,7 +127,7 @@ router bgp 65000
 !
 evpn
   {% for vlan_map in vlan_map_list %}
-    {% if vlan_map.mcast_group %}
+    {% if vlan_map.mcast_group is defined %}
       vni {{ vlan_map.vxlan_id }} l2
         rd auto
         route-target import auto
