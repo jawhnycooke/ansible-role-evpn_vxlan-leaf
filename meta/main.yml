@@ -13,4 +13,5 @@ galaxy_info:
   categories:
   - networking
 
-  dependencies: [{ role: stouts.elasticsearch }]
+  dependencies:
+  - role: rogerscuall.ansible-role-evpn_vxlan-spine
