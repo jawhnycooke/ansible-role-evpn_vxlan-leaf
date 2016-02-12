@@ -1,8 +1,5 @@
 ---
 - name: Create the overlay configuration of an spine switch
-  hosts: localhost
-  roles:
-  - leaf
   tasks:
   - template:
     src: base.j2
