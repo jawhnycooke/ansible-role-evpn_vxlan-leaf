@@ -79,7 +79,7 @@ interface {{ vlan_map.id }}
   description {{ vlan_map.name }}
   no shutdown
   vrf member {{ vlan_map.vrf }}
-  {% if vlan_map.ip_address }
+  {% if vlan_map.ip_address %}
     {% for route_map in route_map_list %}
       {% if route_map.name == vlan_map.vrf }
         ip address {{ vlan_map.ip_address }} tag {{ route_map.tag }}
