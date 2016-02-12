@@ -126,8 +126,8 @@ router bgp 65000
       redistribute static route-map STATIC=>BGP
 !
 evpn
-  {% for vlan_map in vlan_list_map %}
-    {% if vlan_map.mcast_group is defined %}
+  {% for vlan_map in vlan_list_map -%}
+    {% if vlan_map.mcast_group is defined -%}
   vni {{ vlan_map.vxlan_id }} l2
   rd auto
   route-target import auto
