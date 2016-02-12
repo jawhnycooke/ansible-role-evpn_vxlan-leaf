@@ -24,7 +24,7 @@ vlan_list_map:
    ip_address: '10.0.1.1'
    vrf: 'TENANT-B'
    tag: 2020
-   mcast_group': '239.239.239.2'
+   mcast_group: '239.239.239.2'
  - vlan_id: 30
    vxlan_id: 10030
    name: DB
