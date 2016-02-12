@@ -36,3 +36,9 @@ vlan_list_map:
    vrf: 'TENANT-A'
 
 any_cast_mac: '2020.DEAD.BEEF'
+
+route_map_list:
+ - name: 'FABRIC_RMAP_REDIST_VRF_A'
+   tag: 999
+ - name: 'FABRIC_RMAP_REDIST-VRF_B'
+   tag: 1000
