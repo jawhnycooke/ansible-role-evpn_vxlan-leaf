@@ -1,0 +1,140 @@
+nv overlay evpn
+feature ospf
+feature bgp
+feature pim
+feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature vpc
+feature nv overlay
+
+!
+fabric forwarding anycast-gateway-mac {{ any-cast_mac }}
+!
+{#
+The vlan_list_map is one per domain. This is only a requirement of this script.
+vlan_list_map = [{'vlan_id': 10, 'vxlan_id': 10010, 'name': 'WEB', 'ip_address': '10.0.0.1', 'vrf': 'TENANT-A', 'tag': 1010, 'mcast_group': '239.239.239.1},
+{vlan_id: 20, vxlan_id: 10020, name: 'DB', ip_address: '10.0.1.1', vrf: 'TENANT-B', tag: 2020, 'mcast_group': '239.239.239.2},
+{vlan_id: 30, vxlan_id: 10030, name: 'DB', vrf: 'TENANT-A', 'mcast_group': '239.239.239.1}]
+ip_address is an optional key, if no ip_address key means the VLAN is has no IP in the fabric
+mcast_group is an optional key, if no mcast_group means that is the L3VNI, keep this in mind to redo the VRF portion.
+#}
+!
+{% for vlan_map in vlan_list_map %}
+vlan {{ vlan_map.vlan_id }}
+  name {{ vlan_map.name }}
+  vn-segment {{ vlan_map.vxlan_id }}
+!
+{% endfor %}
+{#route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
+  The idea is to have a route-map per TENANT or VRF so we can redistribute the subnets in BGP.
+  RECOMENDATION: Use the tag with the same number of the L3VNI
+#}
+{% for route_map in route_map_list %}
+route-map {{ route_map.name }} permit 10
+  match tag route_map.tag
+!
+{% endfor %}
+#Try to include vPC in the configuration
+#vrf context Keep-Alive
+#  address-family ipv4 unicast
+!
+# vrf_map_list = [{name: TENANT-A, l3vin_id: 10020}]
+# l3vni_id is an int >= 4096
+{% for vrf_map in vrf_map_list %}
+vrf context {{ vrf_map.name }}
+  description {{ vrf_map.name }}
+  vni {{ vrf_map.l3vni_id }}
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+  address-family ipv6 unicast
+    route-target both auto
+    route-target both auto evpn
+!
+{% endfor %}
+# This commands required a reboot to take place.
+# without then supress-arp wont work
+hardware access-list tcam region vacl 0
+hardware access-list tcam region arp-ether 256
+# This commands required a reboot to take place.
+hardware qos ns-buffer-profile mesh
+# TODO: include VPC
+vpc domain 105
+  peer-switch
+  peer-keepalive destination x.x.x.x source y.y.y.y vrf Keep-Alive
+  peer-gateway
+  ip arp synchronize
+# TODO: include VPC
+!
+# The vlan_list_map is one per domain. This is only a requirement of this script.
+# vlan_list_map = [{vlan_id: 10, vxlan_id: 10010, name: 'WEB', ip_address: '10.0.0.1', vrf: 'TENANT-A' },
+# {vlan_id: 20, vxlan_id: 10020, name: 'DB', ip_address: '10.0.1.1', vrf: 'TENANT-B'},
+# {vlan_id: 30, vxlan_id: 10030, name: 'DB', vrf: 'TENANT-A'}]
+# ip_address is an optional key
+# route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
+{% for vlan_map in vlan_list_map %}
+interface {{ vlan_map.id }}
+  description {{ vlan_map.name }}
+  no shutdown
+  vrf member {{ vlan_map.vrf }}
+  {% if vlan_map.ip_address }
+    {% for route_map in route_map_list %}
+      {% if route_map.name == vlan_map.vrf }
+        ip address {{ vlan_map.ip_address }} tag {{ route_map.tag }}
+      {% endif %}
+      fabric forwarding mode anycast-gateway
+    {% endfor %}
+  {% endif %}
+!
+{#
+#}
+interface nve1
+  no shutdown
+  source-interface loopback0
+  host-reachability protocol bgp
+  {% for vlan_map in vlan_map_list %}
+    {% if vlan_map.mcast_group %}
+      member vni {{ vlan_map.vxlan_id }}
+      suppress-arp
+      mcast-group {{ vlan_map.mcast_group }}
+    {% endif %}
+  {% endfor %}
+!
+interface loopback0
+  ip address 10.112.1.243/32
+  ip address 10.112.1.251/32 secondary
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+!
+router ospf UNDERLAY
+  router-id 10.112.1.243
+  log-adjacency-changes detail
+router bgp 65000
+  router-id 10.112.1.243
+  address-family ipv4 unicast
+  neighbor 10.112.1.241 remote-as 65000
+    update-source loopback0
+    address-family ipv4 unicast
+    address-family l2vpn evpn
+      send-community both
+  neighbor 10.112.1.242 remote-as 65000
+    update-source loopback0
+    address-family ipv4 unicast
+    address-family l2vpn evpn
+      send-community both
+  vrf Untrust-Trust-Transit
+    address-family ipv4 unicast
+      advertise l2vpn evpn
+      redistribute direct route-map FABRIC-RMAP-REDIST-SUBNET
+      redistribute static route-map STATIC=>BGP
+evpn
+  {% for vlan_map in vlan_map_list %}
+    {% if vlan_map.mcast_group %}
+      vni {{ vlan_map.vxlan_id }} l2
+        rd auto
+        route-target import auto
+        route-target export auto
+    {% endif %}
+  {% endfor %}

@@ -8,3 +8,29 @@ features:
  - interface-vlan
  - vn-segment-vlan-based
  - feature vpc
+#ip_address is an optional key, if no ip_address key means the SVI of that VLAN has no IP in the fabric. EVPN only
+#mcast_group is an optional key, if no mcast_group means that is the L3VNI, keep this in mind to redo the VRF portion.
+vlan_list_map:
+ - vlan_id: 10
+   vxlan_id: 10010
+   name: WEB
+   ip_address: '10.0.0.1'
+   vrf: 'TENANT-A'
+   tag: 1010
+   mcast_group: '239.239.239.1'
+ - vlan_id: 20
+   vxlan_id: 10020
+   name: DB
+   ip_address: '10.0.1.1'
+   vrf: 'TENANT-B'
+   tag: 2020
+   mcast_group': '239.239.239.2''
+ - vlan_id: 30
+   vxlan_id: 10030
+   name: DB
+   vrf: 'TENANT-A'
+   mcast_group: '239.239.239.1'
+ - vlan_id: 40
+   vxlan_id: 10040
+   name: 'TENANT-A'
+   vrf: 'TENANT-A'
