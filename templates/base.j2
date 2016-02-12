@@ -129,6 +129,7 @@ router bgp 65000
       advertise l2vpn evpn
       redistribute direct route-map FABRIC-RMAP-REDIST-SUBNET
       redistribute static route-map STATIC=>BGP
+!
 evpn
   {% for vlan_map in vlan_map_list %}
     {% if vlan_map.mcast_group %}
