@@ -101,7 +101,7 @@ interface nve1
       suppress-arp
       mcast-group {{ vlan_map.mcast_group }}
     {% endif -%}
-  {% endfor -%}
+  {% endfor %}
 !
 interface loopback0
   ip address x.x.x.x/32
