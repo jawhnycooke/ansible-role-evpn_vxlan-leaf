@@ -26,7 +26,7 @@ vlan {{ vlan_map.vlan_id }}
 #}
 {% for route_map in route_map_list %}
 route-map {{ route_map.name }} permit 10
-  match tag route_map.tag
+  match tag {{ route_map.tag }}
 !
 {% endfor %}
 #Try to include vPC in the configuration
@@ -76,9 +76,9 @@ interface {{ vlan_map.vlan_id }}
   {% if vlan_map.ip_address is defined %}
     {% for route_map in route_map_list %}
       {% if route_map.name == vlan_map.vrf %}
-        ip address {{ vlan_map.ip_address }} tag {{ route_map.tag }}
+  ip address {{ vlan_map.ip_address }} tag {{ route_map.tag }}
       {% endif %}
-      fabric forwarding mode anycast-gateway
+  fabric forwarding mode anycast-gateway
     {% endfor %}
   {% endif %}
  {% endfor %}
@@ -91,9 +91,9 @@ interface nve1
   host-reachability protocol bgp
   {% for vlan_map in vlan_list_map %}
     {% if vlan_map.mcast_group is defined %}
-      member vni {{ vlan_map.vxlan_id }}
-      suppress-arp
-      mcast-group {{ vlan_map.mcast_group }}
+  member vni {{ vlan_map.vxlan_id }}
+  suppress-arp
+  mcast-group {{ vlan_map.mcast_group }}
     {% endif %}
   {% endfor %}
 !
@@ -128,10 +128,10 @@ router bgp 65000
 evpn
   {% for vlan_map in vlan_list_map %}
     {% if vlan_map.mcast_group is defined %}
-      vni {{ vlan_map.vxlan_id }} l2
-        rd auto
-        route-target import auto
-        route-target export auto
+  vni {{ vlan_map.vxlan_id }} l2
+  rd auto
+  route-target import auto
+  route-target export auto
     {% endif %}
   {% endfor %}
 !
