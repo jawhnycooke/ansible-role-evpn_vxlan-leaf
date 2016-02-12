@@ -42,3 +42,7 @@ route_map_list:
    tag: 999
  - name: 'FABRIC_RMAP_REDIST-VRF_B'
    tag: 1000
+
+vrf_map_list:
+ - name: 'TENANT-A'
+   l3vin_id: 10020
