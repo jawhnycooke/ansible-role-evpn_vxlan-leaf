@@ -90,7 +90,7 @@ interface nve1
   source-interface loopback0
   host-reachability protocol bgp
   {% for vlan_map in vlan_list_map %}
-    {% if vlan_map.mcast_group %}
+    {% if vlan_map.mcast_group is defined %}
       member vni {{ vlan_map.vxlan_id }}
       suppress-arp
       mcast-group {{ vlan_map.mcast_group }}
