@@ -45,4 +45,4 @@ route_map_list:
 
 vrf_map_list:
  - name: 'TENANT-A'
-   l3vni_id: 10020
+   l3vni_id: 10040

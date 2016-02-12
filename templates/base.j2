@@ -19,7 +19,7 @@ vlan {{ vlan_map.vlan_id }}
   vn-segment {{ vlan_map.vxlan_id }}
 !
 {% endfor %}
-{#
+!
 {#route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
   The idea is to have a route-map per TENANT or VRF so we can redistribute the subnets in BGP.
   RECOMENDATION: Use the tag with the same number of the L3VNI
@@ -29,12 +29,17 @@ route-map {{ route_map.name }} permit 10
   match tag {{ route_map.tag }}
 !
 {% endfor %}
+{#
 #Try to include vPC in the configuration
 #vrf context Keep-Alive
 #  address-family ipv4 unicast
+#}
 !
-# vrf_map_list = [{name: TENANT-A, l3vni_id: 10020}]
-# l3vni_id is an int >= 4096
+
+{#
+vrf_map_list = [{name: TENANT-A, l3vni_id: 10020}]
+l3vni_id is an int >= 4096
+#}
 {% for vrf_map in vrf_map_list %}
 vrf context {{ vrf_map.name }}
   description {{ vrf_map.name }}
@@ -48,26 +53,29 @@ vrf context {{ vrf_map.name }}
     route-target both auto evpn
 !
 {% endfor %}
-# This commands required a reboot to take place.
-# without then supress-arp wont work
+{#
+This commands required a reboot to take place.
+without then supress-arp wont work
+#}
 hardware access-list tcam region vacl 0
 hardware access-list tcam region arp-ether 256
-# This commands required a reboot to take place.
+{# This commands required a reboot to take place. #}
 hardware qos ns-buffer-profile mesh
-# TODO: include VPC
+{# TODO: include VPC #}
 vpc domain 105
   peer-switch
   peer-keepalive destination x.x.x.x source y.y.y.y vrf Keep-Alive
   peer-gateway
   ip arp synchronize
-# TODO: include VPC
 !
-# The vlan_list_map is one per domain. This is only a requirement of this script.
-# vlan_list_map = [{vlan_id: 10, vxlan_id: 10010, name: 'WEB', ip_address: '10.0.0.1', vrf: 'TENANT-A' },
-# {vlan_id: 20, vxlan_id: 10020, name: 'DB', ip_address: '10.0.1.1', vrf: 'TENANT-B'},
-# {vlan_id: 30, vxlan_id: 10030, name: 'DB', vrf: 'TENANT-A'}]
-# ip_address is an optional key
-# route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
+{#
+ The vlan_list_map is one per domain. This is only a requirement of this script.
+vlan_list_map = [{vlan_id: 10, vxlan_id: 10010, name: 'WEB', ip_address: '10.0.0.1', vrf: 'TENANT-A' },
+{vlan_id: 20, vxlan_id: 10020, name: 'DB', ip_address: '10.0.1.1', vrf: 'TENANT-B'},
+{vlan_id: 30, vxlan_id: 10030, name: 'DB', vrf: 'TENANT-A'}]
+ip_address is an optional key
+route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
+#}
 {% for vlan_map in vlan_list_map %}
 interface {{ vlan_map.vlan_id }}
   description {{ vlan_map.name }}
@@ -83,8 +91,6 @@ interface {{ vlan_map.vlan_id }}
   {% endif %}
  {% endfor %}
 !
-{#
-#}
 interface nve1
   no shutdown
   source-interface loopback0
@@ -135,4 +141,3 @@ evpn
     {% endif -%}
   {%- endfor %}
 !
-#}
