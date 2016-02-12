@@ -76,6 +76,7 @@ vlan_list_map = [{vlan_id: 10, vxlan_id: 10010, name: 'WEB', ip_address: '10.0.0
 ip_address is an optional key
 route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
 #}
+{# IMPORTANT: for some reason the IP address is not showing#}
 {% for vlan_map in vlan_list_map %}
 interface VLAN{{ vlan_map.vlan_id }}
   description {{ vlan_map.name }}
@@ -95,32 +96,32 @@ interface nve1
   no shutdown
   source-interface loopback0
   host-reachability protocol bgp
-  {% for vlan_map in vlan_list_map -%}
+  {% for vlan_map in vlan_list_map %}
     {% if vlan_map.mcast_group is defined -%}
     member vni {{ vlan_map.vxlan_id }}
       suppress-arp
       mcast-group {{ vlan_map.mcast_group }}
-    {% endif -%}
-  {% endfor -%}
+    {% endif %}
+  {% endfor %}
 !
 interface loopback0
-  ip address x.x.x.x/32
-  ip address y.y.y.y/32 secondary
+  ip address 10.112.1.243/32
+  ip address 10.112.1.251/32 secondary
   ip router ospf UNDERLAY area 0.0.0.0
   ip pim sparse-mode
 !
 router ospf UNDERLAY
-  router-id x.x.x.x
+  router-id 10.112.1.243
   log-adjacency-changes detail
 router bgp 65000
-  router-id x.x.x.x
+  router-id 10.112.1.243
   address-family ipv4 unicast
   neighbor 10.112.1.241 remote-as 65000
     update-source loopback0
     address-family ipv4 unicast
     address-family l2vpn evpn
       send-community both
-  neighbor x.x.x.x remote-as 65000
+  neighbor 10.112.1.242 remote-as 65000
     update-source loopback0
     address-family ipv4 unicast
     address-family l2vpn evpn
