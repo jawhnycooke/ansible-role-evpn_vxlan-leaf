@@ -100,7 +100,7 @@ interface nve1
     member vni {{ vlan_map.vxlan_id }}
       suppress-arp
       mcast-group {{ vlan_map.mcast_group }}
-    {% endif %}
+    {% endif -%}
   {% endfor %}
 !
 interface loopback0
