@@ -74,7 +74,7 @@ route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMA
 #}
 {# IMPORTANT:  for some reason the IP address is not showing #}
 {% for vlan_map in vlan_list_map -%}
-{% if vlan_map.ip_address is defined or vlan_map.l3vni is defined %}
+{% if vlan_map.ip_address is defined or vlan_map.l3vni is defined -%}
 interface VLAN{{ vlan_map.vlan_id }}
   description {{ vlan_map.name }}
   no shutdown
@@ -93,12 +93,12 @@ interface nve1
   no shutdown
   source-interface loopback0
   host-reachability protocol bgp
-  {% for vlan_map in vlan_list_map %}
-    {% if vlan_map.mcast_group is defined -%}
-    member vni {{ vlan_map.vxlan_id }}
-      suppress-arp
-      mcast-group {{ vlan_map.mcast_group }}
-    {% endif %}
+  {% for vlan_map in vlan_list_map -%}
+  {% if vlan_map.mcast_group is defined -%}
+  member vni {{ vlan_map.vxlan_id }}
+    suppress-arp
+    mcast-group {{ vlan_map.mcast_group }}
+  {% endif %}
   {% endfor %}
 !
 {#
