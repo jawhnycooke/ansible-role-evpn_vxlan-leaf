@@ -37,6 +37,7 @@ vlan_list_map:
    vxlan_id: 10040
    name: 'TENANT-A'
    vrf: 'TENANT-A'
+   l3vni: True
 
 any_cast_mac: '2020.DEAD.BEEF'
 
