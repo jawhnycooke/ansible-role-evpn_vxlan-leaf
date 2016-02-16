@@ -87,7 +87,7 @@ interface VLAN{{ vlan_map.vlan_id }}
   ip address {{ vlan_map.ip_address }} tag {{ vlan_map.tag }}
   fabric forwarding mode anycast-gateway
 !
-  {% elif  -%}
+  {% elif vlan_map.l3vni  -%}
   ip forwarding
 !
   {% endif -%}
