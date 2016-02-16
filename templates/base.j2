@@ -94,7 +94,6 @@ interface VLAN{{ vlan_map.vlan_id }}
 {% endif -%}
 {% endif -%}
 {% endfor -%}
-!
 interface nve1
   no shutdown
   source-interface loopback0
@@ -138,12 +137,12 @@ router bgp 65000
 #}
 !
 evpn
-  {% for vlan_map in vlan_list_map -%}
-  {% if vlan_map.mcast_group is defined -%}
+{% for vlan_map in vlan_list_map -%}
+{% if vlan_map.mcast_group is defined -%}
     vni {{ vlan_map.vxlan_id }} l2
       rd auto
       route-target import auto
       route-target export auto
-  {% endif -%}
-  {%- endfor %}
+{% endif -%}
+{%- endfor -%}
 !
