@@ -34,7 +34,7 @@ route-map FABRIC_RMAP_REDIST_VRF_{{ vlan_map.name }} permit 10
 #  address-family ipv4 unicast
 #}
 !
-{% for vlan_map in vrf_list_map %}
+{% for vlan_map in vlan_list_map %}
 {% if vlan_map.l3vni is defined and vlan_map.l3vni -%}
 vrf context {{ vlan_map.name }}
   description {{ vlan_map.name }}
