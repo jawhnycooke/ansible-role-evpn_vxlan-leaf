@@ -104,8 +104,8 @@ interface nve1
     mcast-group {{ vlan_map.mcast_group }}
 {% endif -%}
 {% endfor %}
-!
 {#
+!
 interface loopback0
   ip address x.x.x.x/32
   ip address y.y.y.y/32 secondary
