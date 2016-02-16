@@ -34,14 +34,11 @@ route-map FABRIC_RMAP_REDIST_VRF_{{ vlan_map.name }} permit 10
 #  address-family ipv4 unicast
 #}
 !
-{#
-vrf_map_list = [{name: TENANT-A, l3vni_id: 10020}]
-l3vni_id is an int >= 4096
-#}
-{% for vrf_map in vrf_map_list %}
-vrf context {{ vrf_map.name }}
-  description {{ vrf_map.name }}
-  vni {{ vrf_map.l3vni_id }}
+{% for vlan_map in vrf_list_map %}
+{% if vlan_map.l3vni is defined and vlan_map.l3vni -%}
+vrf context {{ vlan_map.name }}
+  description {{ vlan_map.name }}
+  vni {{ vlan_map.l3vni_id }}
   rd auto
   address-family ipv4 unicast
     route-target both auto
@@ -50,7 +47,8 @@ vrf context {{ vrf_map.name }}
     route-target both auto
     route-target both auto evpn
 !
-{% endfor %}
+{% endif -%}
+{% endfor -%}
 {#
 This commands required a reboot to take place.
 without then supress-arp wont work

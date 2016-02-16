@@ -41,12 +41,6 @@ vlan_list_map:
 
 any_cast_mac: '2020.DEAD.BEEF'
 
-route_map_list:
- - name: 'FABRIC_RMAP_REDIST_VRF_A'
-   tag: 999
- - name: 'FABRIC_RMAP_REDIST-VRF_B'
-   tag: 1000
-
 vrf_map_list:
  - name: 'TENANT-A'
    l3vni_id: 10040
