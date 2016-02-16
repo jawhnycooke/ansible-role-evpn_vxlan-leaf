@@ -38,7 +38,7 @@ route-map FABRIC_RMAP_REDIST_VRF_{{ vlan_map.name }} permit 10
 {% if vlan_map.l3vni is defined and vlan_map.l3vni -%}
 vrf context {{ vlan_map.name }}
   description {{ vlan_map.name }}
-  vni {{ vlan_map.l3vni_id }}
+  vni {{ vlan_map.vxlan_id }}
   rd auto
   address-family ipv4 unicast
     route-target both auto
