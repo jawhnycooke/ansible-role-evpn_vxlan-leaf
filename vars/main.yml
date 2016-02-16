@@ -40,7 +40,3 @@ vlan_list_map:
    l3vni: True
 
 any_cast_mac: '2020.DEAD.BEEF'
-
-vrf_map_list:
- - name: 'TENANT-A'
-   l3vni_id: 10040
