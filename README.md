@@ -1,31 +1,58 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Role to help with the configuration of the EVPN/VXLAN leaf switch from Cisco.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+vlan_list_map:
+ - vlan_id: 10
+   vxlan_id: 10010
+   name: WEB
+   ip_address: '10.0.0.1'
+   vrf: 'TENANT-A'
+   mcast_group: '239.239.239.1'
+ - vlan_id: 20
+   vxlan_id: 10020
+   name: DB
+   ip_address: '10.0.1.1'
+   vrf: 'TENANT-B'
+   mcast_group: '239.239.239.2'
+ - vlan_id: 30
+   vxlan_id: 10030
+   name: DB
+   vrf: 'TENANT-A'
+   mcast_group: '239.239.239.1'
+ - vlan_id: 40
+   vxlan_id: 10040
+   name: 'TENANT-A'
+   vrf: 'TENANT-A'
+   l3vni: True
+ - vlan_id: 50
+   vxlan_id: 10050
+   name: 'TENANT-B'
+   vrf: 'TENANT-B'
+   l3vni: True
 
 Dependencies
 ------------
 
+None
 
 
 Example Playbook
 ----------------
+---
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    - hosts: localhost
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: rogerscuall.ansible-role-evpn_vxlan-leaf }
 
 License
 -------
@@ -35,4 +62,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Roger Gomez rgomez@presidio.com
