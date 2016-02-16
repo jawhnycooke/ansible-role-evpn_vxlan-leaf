@@ -1,3 +1,4 @@
+lstrip_blocks
 nv overlay evpn
 feature ospf
 feature bgp
@@ -98,28 +99,28 @@ interface nve1
   member vni {{ vlan_map.vxlan_id }}
     suppress-arp
     mcast-group {{ vlan_map.mcast_group }}
-  {% endif %}
+  {% endif -%}
   {% endfor %}
 !
 {#
 interface loopback0
-  ip address 10.112.1.243/32
-  ip address 10.112.1.251/32 secondary
+  ip address x.x.x.x/32
+  ip address y.y.y.y/32 secondary
   ip router ospf UNDERLAY area 0.0.0.0
   ip pim sparse-mode
 !
 router ospf UNDERLAY
-  router-id 10.112.1.243
+  router-id x.x.x.x
   log-adjacency-changes detail
 router bgp 65000
-  router-id 10.112.1.243
+  router-id x.x.x.x
   address-family ipv4 unicast
-  neighbor 10.112.1.241 remote-as 65000
+  neighbor x.x.x.x remote-as 65000
     update-source loopback0
     address-family ipv4 unicast
     address-family l2vpn evpn
       send-community both
-  neighbor 10.112.1.242 remote-as 65000
+  neighbor x.x.x.x remote-as 65000
     update-source loopback0
     address-family ipv4 unicast
     address-family l2vpn evpn
