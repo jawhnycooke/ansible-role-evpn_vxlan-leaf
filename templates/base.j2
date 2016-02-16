@@ -82,13 +82,13 @@ interface VLAN{{ vlan_map.vlan_id }}
   vrf member {{ vlan_map.vrf }}
 {% if vlan_map.ip_address is defined -%}
 {% for l3vni in vlan_list_map -%}
-{% if l3vni.name is equalto vlan_map.vrf -%}
+{% if l3vni.name is equalto vlan_map.vrf %}
   ip address {{ vlan_map.ip_address }} tag {{ l3vni.vxlan_id }}
   fabric forwarding mode anycast-gateway
 {% endif -%}
 {% endfor -%}
 !
-{% elif vlan_map.l3vni -%}
+{% elif vlan_map.l3vni %}
   ip forwarding
 !
 {% endif -%}
