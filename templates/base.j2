@@ -58,12 +58,13 @@ hardware access-list tcam region vacl 0
 hardware access-list tcam region arp-ether 256
 {# This commands required a reboot to take place. #}
 hardware qos ns-buffer-profile mesh
-{# TODO: include VPC #}
+{# TODO: include VPC
 vpc domain 105
   peer-switch
   peer-keepalive destination x.x.x.x source y.y.y.y vrf Keep-Alive
   peer-gateway
   ip arp synchronize
+#}
 !
 {#
  The vlan_list_map is one per domain. This is only a requirement of this script.
@@ -100,7 +101,7 @@ interface nve1
     suppress-arp
     mcast-group {{ vlan_map.mcast_group }}
   {% endif -%}
-  {%- endfor -%}
+  {% endfor %}
 !
 {#
 interface loopback0
