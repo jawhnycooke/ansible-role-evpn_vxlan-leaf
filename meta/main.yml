@@ -10,6 +10,8 @@ galaxy_info:
     versions:
     - all
 
-  categories:
+  galaxy_tags:
   - networking
 
+  dependencies:
+  - { test: 0 }
