@@ -18,6 +18,7 @@ vlan_list_map:
    vrf: 'TENANT-A'
    tag: 1010
    mcast_group: '239.239.239.1'
+   tag: 999
  - vlan_id: 20
    vxlan_id: 10020
    name: DB
@@ -25,11 +26,13 @@ vlan_list_map:
    vrf: 'TENANT-B'
    tag: 2020
    mcast_group: '239.239.239.2'
+   tag: 998
  - vlan_id: 30
    vxlan_id: 10030
    name: DB
    vrf: 'TENANT-A'
    mcast_group: '239.239.239.1'
+   tag: 999
  - vlan_id: 40
    vxlan_id: 10040
    name: 'TENANT-A'
