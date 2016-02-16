@@ -85,8 +85,8 @@ interface VLAN{{ vlan_map.vlan_id }}
   {%- if vlan_map.ip_address is defined -%}
   ip address {{ vlan_map.ip_address }} tag {{ vlan_map.tag }}
   fabric forwarding mode anycast-gateway
-  {% endif -%}
 !
+  {% endif -%}
 {%- endfor -%}
 interface nve1
   no shutdown
