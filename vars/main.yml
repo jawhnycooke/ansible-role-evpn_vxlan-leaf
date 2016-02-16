@@ -16,29 +16,28 @@ vlan_list_map:
    name: WEB
    ip_address: '10.0.0.1'
    vrf: 'TENANT-A'
-   tag: 1010
    mcast_group: '239.239.239.1'
-   tag: 999
  - vlan_id: 20
    vxlan_id: 10020
    name: DB
    ip_address: '10.0.1.1'
    vrf: 'TENANT-B'
-   tag: 2020
    mcast_group: '239.239.239.2'
-   tag: 998
  - vlan_id: 30
    vxlan_id: 10030
    name: DB
    vrf: 'TENANT-A'
    mcast_group: '239.239.239.1'
-   tag: 999
  - vlan_id: 40
    vxlan_id: 10040
    name: 'TENANT-A'
    vrf: 'TENANT-A'
    l3vni: True
-   tag: 999
+- vlan_id: 50
+  vxlan_id: 10050
+  name: 'TENANT-B'
+  vrf: 'TENANT-B'
+  l3vni: True
 
 any_cast_mac: '2020.DEAD.BEEF'
 

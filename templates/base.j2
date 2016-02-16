@@ -87,14 +87,14 @@ interface VLAN{{ vlan_map.vlan_id }}
   {% if l3vni.name is equalto vlan_map.vrf -%}
   ip address {{ vlan_map.ip_address }} tag {{ l3vni.vxlan_id }}
   fabric forwarding mode anycast-gateway
-  {% endif %}
+  {% endif -%}
   {% endfor -%}
 !
   {% elif vlan_map.l3vni -%}
   ip forwarding
 !
-  {% endif %}
-{% endif %}
+  {% endif -%}
+{% endif -%}
 {% endfor -%}
 !
 interface nve1
