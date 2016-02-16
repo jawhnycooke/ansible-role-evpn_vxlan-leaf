@@ -90,17 +90,18 @@ interface VLAN{{ vlan_map.vlan_id }}
 !
   {% endif %}
 {% endif %}
-{% endfor %}
+{% endfor -%}
+!
 interface nve1
   no shutdown
   source-interface loopback0
   host-reachability protocol bgp
   {% for vlan_map in vlan_list_map -%}
-{% if vlan_map.mcast_group is defined -%}
+  {% if vlan_map.mcast_group is defined -%}
   member vni {{ vlan_map.vxlan_id }}
     suppress-arp
     mcast-group {{ vlan_map.mcast_group }}
-{% endif -%}
+  {% endif -%}
   {% endfor %}
 !
 {#
