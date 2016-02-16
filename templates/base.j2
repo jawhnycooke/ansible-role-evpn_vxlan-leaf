@@ -87,7 +87,7 @@ interface VLAN{{ vlan_map.vlan_id }}
   fabric forwarding mode anycast-gateway
 !
   {% endif -%}
-{%- endfor -%}
+{% endfor -%}
 interface nve1
   no shutdown
   source-interface loopback0
