@@ -21,7 +21,7 @@ vlan {{ vlan_map.vlan_id }}
   The idea is to have a route-map per TENANT or VRF so we can redistribute the subnets in BGP.
   RECOMENDATION: Use the tag with the same number of the L3VNI
 #}
-{% for vlan_map in vlan_map_list %}
+{% for vlan_map in vlan_list_map %}
 {% if vlan_map is defined and vlan_map -%}
 route-map 'FABRIC_RMAP_REDIST_VRF_{{ vlan_map.vrf }} permit 10
   match tag {{ vlan_map.tag }}
