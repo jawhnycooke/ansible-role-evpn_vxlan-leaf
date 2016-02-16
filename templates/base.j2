@@ -1,4 +1,3 @@
-#jinja2: trim_blocks: False
 nv overlay evpn
 feature ospf
 feature bgp
@@ -102,6 +101,7 @@ interface nve1
     {% endif %}
   {% endfor %}
 !
+{#
 interface loopback0
   ip address 10.112.1.243/32
   ip address 10.112.1.251/32 secondary
@@ -129,6 +129,7 @@ router bgp 65000
       advertise l2vpn evpn
       redistribute direct route-map FABRIC-RMAP-REDIST-SUBNET
       redistribute static route-map STATIC=>BGP
+#}
 !
 evpn
   {% for vlan_map in vlan_list_map -%}
