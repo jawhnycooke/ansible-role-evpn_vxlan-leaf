@@ -33,11 +33,11 @@ vlan_list_map:
    name: 'TENANT-A'
    vrf: 'TENANT-A'
    l3vni: True
-- vlan_id: 50
-  vxlan_id: 10050
-  name: 'TENANT-B'
-  vrf: 'TENANT-B'
-  l3vni: True
+ - vlan_id: 50
+   vxlan_id: 10050
+   name: 'TENANT-B'
+   vrf: 'TENANT-B'
+   l3vni: True
 
 any_cast_mac: '2020.DEAD.BEEF'
 
