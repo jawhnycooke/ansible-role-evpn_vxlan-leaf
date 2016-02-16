@@ -38,6 +38,7 @@ vlan_list_map:
    name: 'TENANT-A'
    vrf: 'TENANT-A'
    l3vni: True
+   tag: 999
 
 any_cast_mac: '2020.DEAD.BEEF'
 
