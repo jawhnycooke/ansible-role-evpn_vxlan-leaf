@@ -77,7 +77,7 @@ ip_address is an optional key
 route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
 #}
 {# IMPORTANT:  for some reason the IP address is not showing #}
-{% for vlan_map in vlan_list_map %}
+{% for vlan_map in vlan_list_map -%}
 interface VLAN{{ vlan_map.vlan_id }}
   description {{ vlan_map.name }}
   no shutdown
@@ -85,8 +85,8 @@ interface VLAN{{ vlan_map.vlan_id }}
   {% if vlan_map.ip_address is defined -%}
   ip address {{ vlan_map.ip_address }} tag {{ vlan_map.tag }}
   fabric forwarding mode anycast-gateway
-  {% endif %}
- {% endfor %}
+  {% endif -%}
+ {% endfor -%}
 !
 interface nve1
   no shutdown
