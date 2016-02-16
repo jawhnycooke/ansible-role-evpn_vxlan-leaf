@@ -82,7 +82,7 @@ interface VLAN{{ vlan_map.vlan_id }}
   description {{ vlan_map.name }}
   no shutdown
   vrf member {{ vlan_map.vrf }}
-  {%- if vlan_map.ip_address is defined -%}
+  {% if vlan_map.ip_address is defined -%}
   ip address {{ vlan_map.ip_address }} tag {{ vlan_map.tag }}
   fabric forwarding mode anycast-gateway
 !
