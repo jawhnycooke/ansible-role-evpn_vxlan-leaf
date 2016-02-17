@@ -11,10 +11,15 @@ None
 Role Variables
 --------------
 vlan_list_map: is a list of dictionaries, every element of the list is as follows:
+
 vlan_id(required): id of the vlan
+
 vxlan_id(optional): id of the vxlan
+
 name(required): name of the vlan
+
 ip_address(optional): ip address of the subnet, if no IP address is provided no SVI is configured
+
 vrf(required): name of the VRF or Tenant
 mcast_group(required): multicast group for the VTEP.
 l3vni(optional): is only required in the L3VNI.
