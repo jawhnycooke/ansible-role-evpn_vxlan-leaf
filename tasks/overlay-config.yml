@@ -1,5 +1,5 @@
 ---
 - name: Create the overlay configuration of an leaf switch
   template:
-    src: base.j2
+    src: overlay.j2
     dest: CFG/leaf.cfg
