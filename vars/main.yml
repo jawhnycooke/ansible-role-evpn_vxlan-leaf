@@ -12,17 +12,17 @@ features:
 #mcast_group is an optional key, if no mcast_group means that is the L3VNI, keep this in mind to redo the VRF portion.
 vlan_list_map:
  - vlan_id: 10
-   vxlan_id: 10010
    name: WEB
-   ip_address: '10.0.0.1'
+   ip_address: '10.0.10.1'
    vrf: 'TENANT-A'
    mcast_group: '239.239.239.1'
+   mask: 24
  - vlan_id: 20
-   vxlan_id: 10020
    name: DB
-   ip_address: '10.0.1.1'
+   ip_address: '10.0.20.1'
    vrf: 'TENANT-B'
    mcast_group: '239.239.239.2'
+   mask: 24
  - vlan_id: 30
    vxlan_id: 10030
    name: DB
@@ -38,5 +38,7 @@ vlan_list_map:
    name: 'TENANT-B'
    vrf: 'TENANT-B'
    l3vni: True
+
+vxlan_prefix: 100
 
 any_cast_mac: '2020.DEAD.BEEF'
