@@ -1,12 +1,5 @@
-nv overlay evpn
-feature ospf
-feature bgp
-feature pim
-feature interface-vlan
-feature vn-segment-vlan-based
-feature lacp
-feature vpc
-feature nv overlay
+{% block features %}
+{% endblock %}
 !
 fabric forwarding anycast-gateway-mac {{ any_cast_mac }}
 !
