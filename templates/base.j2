@@ -12,12 +12,14 @@ feature nv overlay
 !
 fabric forwarding anycast-gateway-mac {{ any_cast_mac }}
 !
+{% block vlan_database %}
 {% for vlan_map in vlan_list_map %}
 vlan {{ vlan_map.vlan_id }}
   name {{ vlan_map.name }}
   vn-segment {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
 !
 {% endfor %}
+{% endblock %}
 {#route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
   The idea is to have a route-map per TENANT or VRF so we can redistribute the subnets in BGP.
   RECOMENDATION: Use the tag with the same number of the L3VNI
