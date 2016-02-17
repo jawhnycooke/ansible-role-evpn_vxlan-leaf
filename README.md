@@ -10,35 +10,18 @@ None
 
 Role Variables
 --------------
+vlan_list_map: is a list of dictionaries, every element of the list is as follows:
+vlan_id(required): id of the vlan
+vxlan_id(optional): id of the vxlan
+name(required): name of the vlan
+ip_address(optional): ip address of the subnet, if no IP address is provided no SVI is configured
+vrf(required): name of the VRF or Tenant
+mcast_group(required): multicast group for the VTEP.
+l3vni(optional): is only required in the L3VNI.
 
-vlan_list_map:
- - vlan_id: 10
-   vxlan_id: 10010
-   name: WEB
-   ip_address: '10.0.0.1'
-   vrf: 'TENANT-A'
-   mcast_group: '239.239.239.1'
- - vlan_id: 20
-   vxlan_id: 10020
-   name: DB
-   ip_address: '10.0.1.1'
-   vrf: 'TENANT-B'
-   mcast_group: '239.239.239.2'
- - vlan_id: 30
-   vxlan_id: 10030
-   name: DB
-   vrf: 'TENANT-A'
-   mcast_group: '239.239.239.1'
- - vlan_id: 40
-   vxlan_id: 10040
-   name: 'TENANT-A'
-   vrf: 'TENANT-A'
-   l3vni: True
- - vlan_id: 50
-   vxlan_id: 10050
-   name: 'TENANT-B'
-   vrf: 'TENANT-B'
-   l3vni: True
+vxlan_prefix(optional): this number will be added to the vlan_id to find the vxlan_id if no vxlan_id was provided.
+
+any_cast_mac(required): MAC address to support anycast-gateway-mac
 
 Dependencies
 ------------
