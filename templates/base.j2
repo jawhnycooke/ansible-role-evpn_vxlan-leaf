@@ -13,7 +13,7 @@ fabric forwarding anycast-gateway-mac {{ any_cast_mac }}
 {% for vlan_map in vlan_list_map %}
 vlan {{ vlan_map.vlan_id }}
   name {{ vlan_map.name }}
-  vn-segment {{ vlan_map.vxlan_id|default(vxlan_prefix) }}
+  vn-segment {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
 !
 {% endfor %}
 {#route_map_list = [{name: 'FABRIC_RMAP_REDIST-VRFA, tag: 999}, {name: 'FABRIC_RMAP_REDIST-VRFB, tag: 1000}]
@@ -23,7 +23,7 @@ vlan {{ vlan_map.vlan_id }}
 {% for vlan_map in vlan_list_map %}
 {% if vlan_map.l3vni is defined and vlan_map.l3vni -%}
 route-map FABRIC_RMAP_REDIST_VRF_{{ vlan_map.name }} permit 10
-  match tag {{ vlan_map.vxlan_id|default(vxlan_prefix) }}
+  match tag {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
 !
 {% endif -%}
 {% endfor %}
@@ -37,7 +37,7 @@ route-map FABRIC_RMAP_REDIST_VRF_{{ vlan_map.name }} permit 10
 {% if vlan_map.l3vni is defined and vlan_map.l3vni -%}
 vrf context {{ vlan_map.name }}
   description {{ vlan_map.name }}
-  vni {{ vlan_map.vxlan_id|default(vxlan_prefix) }}
+  vni {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
   rd auto
   address-family ipv4 unicast
     route-target both auto
@@ -99,7 +99,7 @@ interface nve1
   host-reachability protocol bgp
   {% for vlan_map in vlan_list_map -%}
   {% if vlan_map.mcast_group is defined %}
-  member vni {{ vlan_map.vxlan_id|default(vxlan_prefix) }}
+  member vni {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
     suppress-arp
     mcast-group {{ vlan_map.mcast_group }}
 {% endif -%}
@@ -138,7 +138,7 @@ router bgp 65000
 evpn
 {% for vlan_map in vlan_list_map -%}
 {% if vlan_map.mcast_group is defined -%}
-    vni {{ vlan_map.vxlan_id|default(vxlan_prefix) }} l2
+    vni {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }} l2
       rd auto
       route-target import auto
       route-target export auto

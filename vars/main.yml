@@ -39,6 +39,6 @@ vlan_list_map:
    vrf: 'TENANT-B'
    l3vni: True
 
-vxlan_prefix: 100
+vxlan_prefix: 10000
 
 any_cast_mac: '2020.DEAD.BEEF'
