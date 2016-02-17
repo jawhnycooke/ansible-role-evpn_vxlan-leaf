@@ -75,7 +75,7 @@ interface VLAN{{ vlan_map.vlan_id }}
 {% if vlan_map.ip_address is defined -%}
 {% for l3vni in vlan_list_map -%}
 {% if l3vni.name is equalto vlan_map.vrf %}
-  ip address {{ vlan_map.ip_address }}/{{ vlan_map.mask }} tag {{ l3vni.vxlan_id }}
+  ip address {{ vlan_map.ip_address }}/{{ vlan_map.mask }} tag {{ l3vni.vxlan_id|default(vxlan_prefix + l3vni.vlan_id) }}
   fabric forwarding mode anycast-gateway
 {% endif -%}
 {% endfor -%}
