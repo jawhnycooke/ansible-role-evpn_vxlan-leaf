@@ -11,3 +11,87 @@ feature lacp
 feature vpc
 feature nv overlay
 {% endblock %}
+{% block vlan_database %}
+{% for vlan_map in vlan_list_map %}
+vlan {{ vlan_map.vlan_id }}
+  name {{ vlan_map.name }}
+  vn-segment {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
+!
+{% endfor %}
+{% endblock %}
+!
+{% block redistribution_route_map %}
+{% for vlan_map in vlan_list_map %}
+{% if vlan_map.l3vni is defined and vlan_map.l3vni -%}
+route-map FABRIC_RMAP_REDIST_VRF_{{ vlan_map.name }} permit 10
+  match tag {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
+!
+{% endif -%}
+{% endfor %}
+{% endblock %}
+{% block vrf_definitions %}
+!
+{% for vlan_map in vlan_list_map %}
+{% if vlan_map.l3vni is defined and vlan_map.l3vni -%}
+vrf context {{ vlan_map.name }}
+  description {{ vlan_map.name }}
+  vni {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+  address-family ipv6 unicast
+    route-target both auto
+    route-target both auto evpn
+!
+{% endif -%}
+{% endfor -%}
+{% endblock %}
+!
+{% block interface_vlan %}
+{% for vlan_map in vlan_list_map -%}
+{% if vlan_map.ip_address is defined or vlan_map.l3vni is defined -%}
+interface VLAN{{ vlan_map.vlan_id }}
+  description {{ vlan_map.name }}
+  no shutdown
+  vrf member {{ vlan_map.vrf }}
+{% if vlan_map.ip_address is defined -%}
+{% for l3vni in vlan_list_map -%}
+{% if l3vni.name is equalto vlan_map.vrf %}
+  ip address {{ vlan_map.ip_address }}/{{ vlan_map.mask }} tag {{ l3vni.vxlan_id|default(vxlan_prefix + l3vni.vlan_id) }}
+  fabric forwarding mode anycast-gateway
+{% endif -%}
+{% endfor -%}
+!
+{% elif vlan_map.l3vni %}
+  ip forwarding
+!
+{% endif -%}
+{% endif -%}
+{% endfor -%}
+{% endblock %}
+!
+{% block interface_vtep %}
+interface nve1
+  no shutdown
+  source-interface loopback0
+  host-reachability protocol bgp
+  {% for vlan_map in vlan_list_map -%}
+  {% if vlan_map.mcast_group is defined %}
+  member vni {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }}
+    suppress-arp
+    mcast-group {{ vlan_map.mcast_group }}
+{% endif -%}
+{% endfor %}
+{% endblock %}
+{% block evpn_definition %}
+evpn
+{% for vlan_map in vlan_list_map -%}
+{% if vlan_map.mcast_group is defined -%}
+    vni {{ vlan_map.vxlan_id|default(vxlan_prefix + vlan_map.vlan_id) }} l2
+      rd auto
+      route-target import auto
+      route-target export auto
+{% endif -%}
+{%- endfor -%}
+{% endblock %}
