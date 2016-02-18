@@ -1,4 +1,6 @@
+{% extends "base.j2" %}
 
+{% block features_to_enable %}
 nv overlay evpn
 feature ospf
 feature bgp
@@ -8,6 +10,4 @@ feature vn-segment-vlan-based
 feature lacp
 feature vpc
 feature nv overlay
-
-{% block vlan_database %}
 {% endblock %}
