@@ -31,7 +31,9 @@ None
 
 Example Playbook
 ----------------
+
 To generate the overlay configuration of the leaf switches.
+
 ---
     - hosts: localhost
       roles:
