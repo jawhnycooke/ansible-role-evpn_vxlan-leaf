@@ -31,8 +31,8 @@ None
 
 Example Playbook
 ----------------
----
 To generate the overlay configuration of the leaf switches.
+---
     - hosts: localhost
       roles:
          - { role: rogerscuall.ansible-role-evpn_vxlan-leaf }
