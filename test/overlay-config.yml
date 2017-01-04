@@ -1,0 +1,5 @@
+---
+- name: Create the overlay configuration of an leaf switch
+  template:
+    src: overlay.j2
+    dest: "{{ role_path }}/files/leaf.cfg"
