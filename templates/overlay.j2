@@ -1,5 +1,7 @@
 {% extends "base.j2" %}
-
+{% block comments %}
+!This configuration is only the overlay of the leaves switches, without ingress replication and changing the TCAM values.
+{% endblock %}
 {% block features_to_enable %}
 nv overlay evpn
 feature ospf
